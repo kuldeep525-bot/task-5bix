@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
+import toast from "react-hot-toast";
 import API from "../../services/api";
 
 export default function CreateUserForm({
@@ -10,12 +10,15 @@ export default function CreateUserForm({
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function createUser(e) {
 
     e.preventDefault();
 
     try {
+
+      setLoading(true);
 
       await API.post("/user", {
         name,
@@ -28,9 +31,21 @@ export default function CreateUserForm({
 
       getUsers();
 
+      toast.success(
+        "User created successfully"
+      );
+
+      setLoading(false);
+
     } catch (error) {
 
       console.log(error);
+
+      toast.error(
+        "Something went wrong"
+      );
+
+      setLoading(false);
     }
   }
 
@@ -42,7 +57,9 @@ export default function CreateUserForm({
     >
 
       <h2 className="text-3xl font-bold mb-5">
+
         Create User
+
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -64,17 +81,20 @@ export default function CreateUserForm({
           onChange={(e) =>
             setEmail(e.target.value)
           }
-          className="bg-black/30 border border-gray-700 rounded-xl p-4 outline-none"
+        className="bg-black/30 border border-gray-700 rounded-xl p-4 outline-none focus:ring-2 focus:ring-blue-500 transition"
         />
 
       </div>
 
       <button
         type="submit"
-        className="mt-5 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl font-semibold transition"
+        disabled={loading}
+        className="mt-5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-xl font-semibold transition"
       >
 
-        Create User
+        {loading
+          ? "Creating..."
+          : "Create User"}
 
       </button>
 

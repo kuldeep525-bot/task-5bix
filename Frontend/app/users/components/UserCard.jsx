@@ -1,11 +1,12 @@
 export default function UserCard({
   user,
   deleteUser,
+   deleteLoading,
 }) {
 
   return (
 
-    <div className="bg-white/10 backdrop-blur-lg border border-gray-700 rounded-3xl p-6 hover:scale-105 transition duration-300 shadow-2xl">
+    <div className="bg-white/10 backdrop-blur-lg border border-gray-700 rounded-3xl p-6 hover:scale-105 hover:-translate-y-1 transition duration-300 shadow-2xl">
 
       <div className="flex items-center gap-4 mb-5">
 
@@ -35,22 +36,27 @@ export default function UserCard({
 
       <div className="flex items-center justify-between">
 
-        <button className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl font-semibold transition">
+        <button className="bg-blue-600 hover:bg-blue-700 active:scale-95 px-4 py-2 rounded-xl font-semibold transition">
 
           View Profile
 
         </button>
 
         <button
-          onClick={() =>
-            deleteUser(user._id)
-          }
-          className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-xl font-semibold transition"
-        >
+  onClick={() =>
+    deleteUser(user._id)
+  }
+  disabled={
+    deleteLoading === user._id
+  }
+  className="bg-red-600 hover:bg-red-700 active:scale-95 disabled:bg-gray-600 disabled:cursor-not-allowed px-4 py-2 rounded-xl font-semibold transition"
+>
 
-          Delete
+  {deleteLoading === user._id
+    ? "Deleting..."
+    : "Delete"}
 
-        </button>
+</button>
 
       </div>
 
