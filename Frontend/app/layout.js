@@ -15,6 +15,10 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Social Media App",
   description: "NestJS + Next.js App",
+
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }) {

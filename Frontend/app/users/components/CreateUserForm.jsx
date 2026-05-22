@@ -47,7 +47,7 @@ export default function CreateUserForm({ getUsers,setUsers }) {
   return (
     <form
       onSubmit={createUser}
-      className="bg-white/10 backdrop-blur-lg border border-gray-700 p-6 rounded-3xl mb-10 shadow-2xl"
+     className="bg-white/10 backdrop-blur-lg border border-gray-700 p-4 sm:p-6 rounded-3xl mb-10 shadow-2xl"
     >
       <h2 className="text-3xl font-bold mb-5">Create User</h2>
 
