@@ -52,9 +52,14 @@ export default function UserCard({
   className="bg-red-600 hover:bg-red-700 active:scale-95 disabled:bg-gray-600 disabled:cursor-not-allowed px-4 py-2 rounded-xl font-semibold transition"
 >
 
-  {deleteLoading === user._id
-    ? "Deleting..."
-    : "Delete"}
+  {deleteLoading === user._id ? (
+  <>
+    <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+    Deleting...
+  </>
+) : (
+  "Delete"
+)}
 
 </button>
 
