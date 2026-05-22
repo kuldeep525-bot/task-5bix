@@ -13,8 +13,15 @@ export default function CreateUserForm({
   const [loading, setLoading] = useState(false);
 
   async function createUser(e) {
-
     e.preventDefault();
+
+    //validation
+    
+    if(!name.trim() || !email.trim())
+    {
+      toast.error("Name And Email are required")
+      return
+    }
 
     try {
 
@@ -29,23 +36,20 @@ export default function CreateUserForm({
       setName("");
       setEmail("");
 
-      getUsers();
+       getUsers()
 
       toast.success(
         "User created successfully"
       );
 
-      setLoading(false);
-
     } catch (error) {
-
       console.log(error);
 
       toast.error(
         "Something went wrong"
       );
-
-      setLoading(false);
+    }finally{
+      setLoading(false)
     }
   }
 
