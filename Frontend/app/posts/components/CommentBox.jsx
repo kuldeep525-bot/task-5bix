@@ -2,6 +2,7 @@
 
 // import { useState } from "react";
 // import toast from "react-hot-toast";
+
 // import API from "../../services/api";
 
 // export default function CommentBox({
@@ -12,11 +13,23 @@
 //   const [comment, setComment] =
 //     useState("");
 
+//   const [loading, setLoading] =
+//     useState(false);
+
 //   async function addComment() {
 
-//     if (!comment) return;
+//     // prevent double click
+//     if (loading) return;
+
+//     // validation
+//     if (!comment.trim()) {
+//       toast.error("Comment cannot be empty");
+//       return;
+//     }
 
 //     try {
+
+//       setLoading(true);
 
 //       await API.post(
 //         `/posts/${postId}/comment`,
@@ -29,9 +42,21 @@
 
 //       getPosts();
 
+//       toast.success(
+//         "Comment added"
+//       );
+
 //     } catch (error) {
 
 //       console.log(error);
+
+//       toast.error(
+//         "Failed to add comment"
+//       );
+
+//     } finally {
+
+//       setLoading(false);
 //     }
 //   }
 
@@ -48,15 +73,23 @@
 //           onChange={(e) =>
 //             setComment(e.target.value)
 //           }
-//           className="flex-1 bg-black/30 border border-gray-700 rounded-xl p-3 outline-none"
+//           className="flex-1 bg-black/30 border border-gray-700 rounded-xl p-3 outline-none focus:ring-2 focus:ring-blue-500 transition"
 //         />
 
 //         <button
 //           onClick={addComment}
-//           className="bg-green-600 hover:bg-green-700 px-5 rounded-xl font-semibold transition"
+//           disabled={loading}
+//           className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed active:scale-95 px-5 rounded-xl font-semibold transition flex items-center justify-center gap-2"
 //         >
 
-//           Send
+//           {loading ? (
+//             <>
+//               <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+//               Adding...
+//             </>
+//           ) : (
+//             "Send"
+//           )}
 
 //         </button>
 
@@ -65,6 +98,8 @@
 //     </div>
 //   );
 // }
+
+
 
 "use client";
 
@@ -86,7 +121,14 @@ export default function CommentBox({
 
   async function addComment() {
 
-    if (!comment) return;
+    // prevent double click
+    if (loading) return;
+
+    // validation
+    if (!comment.trim().replace(/\s+/g, "")) {
+      toast.error("Comment cannot be empty");
+      return;
+    }
 
     try {
 
@@ -107,8 +149,6 @@ export default function CommentBox({
         "Comment added"
       );
 
-      setLoading(false);
-
     } catch (error) {
 
       console.log(error);
@@ -116,6 +156,8 @@ export default function CommentBox({
       toast.error(
         "Failed to add comment"
       );
+
+    } finally {
 
       setLoading(false);
     }
@@ -125,7 +167,7 @@ export default function CommentBox({
 
     <div className="mt-5">
 
-      <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
 
         <input
           type="text"
@@ -140,12 +182,17 @@ export default function CommentBox({
         <button
           onClick={addComment}
           disabled={loading}
-          className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed active:scale-95 px-5 rounded-xl font-semibold transition"
+          className="min-h-[48px] sm:min-w-[120px] bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed active:scale-95 px-5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2"
         >
 
-          {loading
-            ? "Adding..."
-            : "Send"}
+          {loading ? (
+            <>
+              <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+              Adding...
+            </>
+          ) : (
+            "Send"
+          )}
 
         </button>
 
@@ -154,3 +201,4 @@ export default function CommentBox({
     </div>
   );
 }
+
