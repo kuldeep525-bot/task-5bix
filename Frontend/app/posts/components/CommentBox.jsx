@@ -110,7 +110,7 @@ import API from "../../services/api";
 
 export default function CommentBox({
   postId,
-  getPosts,
+   setPosts,
 }) {
 
   const [comment, setComment] =
@@ -143,7 +143,19 @@ export default function CommentBox({
 
       setComment("");
 
-      getPosts();
+      setPosts((prev) =>
+  prev.map((post) =>
+    post._id === postId
+      ? {
+          ...post,
+          comments: [
+            ...post.comments,
+            comment,
+          ],
+        }
+      : post
+  )
+);
 
       toast.success(
         "Comment added"

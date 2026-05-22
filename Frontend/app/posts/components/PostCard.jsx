@@ -3,7 +3,7 @@ import CommentBox from "./CommentBox";
 export default function PostCard({
   post,
   likePost,
-  getPosts,
+  setPosts,
   likeLoading,
 }) {
 
@@ -106,7 +106,7 @@ export default function PostCard({
 
         <CommentBox
           postId={post._id}
-          getPosts={getPosts}
+          setPosts={setPosts}
         />
 
       </div>

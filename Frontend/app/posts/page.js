@@ -208,9 +208,18 @@ export default function PostsPage() {
 
       await API.post(`/posts/${id}/like`);
 
-      toast.success("Post liked");
+      setPosts((prev) =>
+        prev.map((post) =>
+          post._id === id
+            ? {
+                ...post,
+                likes: post.likes + 1,
+              }
+            : post,
+        ),
+      );
 
-      getPosts();
+      toast.success("Post liked");
     } catch (error) {
       console.log(error);
 
@@ -236,7 +245,7 @@ export default function PostsPage() {
             </p>
           </div>
 
-          <CreatePostForm getPosts={getPosts} />
+          <CreatePostForm setPosts={setPosts} />
 
           {loading ? (
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -264,6 +273,7 @@ export default function PostsPage() {
                   likePost={likePost}
                   getPosts={getPosts}
                   likeLoading={likeLoading}
+                  setPosts={setPosts}
                 />
               ))}
             </div>
