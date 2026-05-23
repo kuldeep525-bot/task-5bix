@@ -33,43 +33,102 @@ export class PostsService{
     return posts
   }
 
-  async likePost(id:string)
-  {
-    const post=await this.postModel.findById(id)
-     if (!post) {
 
-    throw new NotFoundException(
-      'Post not found'
-    );
+
+  // async likePost(id:string)
+  // {
+  //   const post=await this.postModel.findById(id)
+  //    if (!post) {
+
+  //   throw new NotFoundException(
+  //     'Post not found'
+  //   );
+  // }
+
+  // post.likes+=1;
+
+  // await post.save()
+  // return post;
+
+  // }
+
+async likePost(postId: string) {
+  const post = await this.postModel.findById(postId);
+
+  if (!post) {
+    throw new NotFoundException("Post not found");
   }
 
-  post.likes+=1;
+  const userId = "demoUser"; // later JWT se replace hoga
 
-  await post.save()
-  return post;
+  // safety check
+  post.likesBy = post.likesBy || [];
 
+  const alreadyLiked = post.likesBy.includes(userId);
+
+  if (alreadyLiked) {
+    post.likesBy = post.likesBy.filter((id) => id !== userId);
+    post.likes = Math.max(0, post.likes - 1);
+  } else {
+    post.likesBy.push(userId);
+    post.likes += 1;
   }
 
-  async addComment(id:string,comment:string)
-  {
-    const post=await this.postModel.findById(id);
+  await post.save();
 
-      if (!post) {
+  return {
+    _id: post._id,
+    likes: post.likes,
+    isLiked: !alreadyLiked,
+  };
+}
 
-    throw new NotFoundException(
-      'Post not found'
-    );
+  // async addComment(id:string,comment:string)
+  // {
+  //   const post=await this.postModel.findById(id);
+
+  //     if (!post) {
+
+  //   throw new NotFoundException(
+  //     'Post not found'
+  //   );
+  // }
+
+  //   post.comments.push(comment);
+
+  // await post.save();
+
+  // return post;
+
+
+  // }
+
+  async addComment(id: string, comment: string) {
+  const post = await this.postModel.findById(id);
+
+  if (!post) {
+    throw new NotFoundException("Post not found");
   }
 
-    post.comments.push(comment);
+  post.comments = post.comments || [];
+
+  post.comments.push(comment);
 
   await post.save();
 
   return post;
-
-
-  }
-
+}
   
+async deleteComment(postId: string, commentIndex: number) {
+  const post = await this.postModel.findById(postId);
+
+  if (!post) throw new NotFoundException('Post not found');
+
+  post.comments.splice(commentIndex, 1);
+
+  await post.save();
+
+  return post;
+}
 
 }

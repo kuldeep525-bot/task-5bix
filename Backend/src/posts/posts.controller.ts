@@ -50,4 +50,13 @@ export class PostsController {
     return this.postsService.addComment(id,comment)
   }
 
+  @Post(':id/comment/delete')
+  
+deleteComment(
+  @Param('id') id: string,
+  @Body('index') index: number
+) {
+  return this.postsService.deleteComment(id, index);
+}
+
 }

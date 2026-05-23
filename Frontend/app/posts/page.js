@@ -206,29 +206,30 @@ export default function PostsPage() {
     try {
       setLikeLoading(id);
 
-      await API.post(`/posts/${id}/like`);
+      const response = await API.post(`/posts/${id}/like`);
+
+      const { _id, likes, isLiked } = response.data;
 
       setPosts((prev) =>
         prev.map((post) =>
-          post._id === id
+          post._id === _id
             ? {
                 ...post,
-                likes: post.likes + 1,
+                likes,
+                isLiked,
               }
             : post,
         ),
       );
 
-      toast.success("Post liked");
+      toast.success(isLiked ? "Post liked" : "Post unliked");
     } catch (error) {
       console.log(error);
-
-      toast.error("Failed to like post");
+      toast.error("Failed to update like");
     } finally {
       setLikeLoading("");
     }
   }
-
   return (
     <>
       <Navbar />
